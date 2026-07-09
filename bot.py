@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 # ========== НАСТРОЙКИ ==========
 BOT_TOKEN = "XXX"
 SECRET_KEY = "XXX"
-SALT = XXX
+SALT = b"my_salt_16bytes"  # ровно 16 байт
 DB_NAME = "passwords.db"
 
 # ========== АВТОРИЗАЦИЯ ПО КЛЮЧУ ==========
@@ -25,7 +25,7 @@ class AuthState(StatesGroup):
     waiting_for_key = State()
 
 class AuthMiddleware(BaseMiddleware):
-    async def call(
+    async def __call__(
         self,
         handler: Callable[[types.Message, Dict[str, Any]], Awaitable[Any]],
         event: types.Message,
@@ -162,7 +162,7 @@ async def cmd_list(message: types.Message):
         return
     answer = "📋 *Сервисы и логины:*\n"
     for service, login in rows:
-        answer += f"• *{service}* — {login}\n"
+        answer += f"• *{service}* — `{login}`\n"
     await message.answer(answer, parse_mode="Markdown")
 
 @dp.message(Command("add"))
@@ -217,7 +217,7 @@ async def process_master_for_get(message: types.Message, state: FSMContext):
     try:
         password = decrypt_password(encrypted, master)
         await message.answer(
-            f"🔓 *{service}*\nЛогин: {login}`\nПароль: {password}`",
+            f"🔓 *{service}*\nЛогин: `{login}`\nПароль: `{password}`",
             parse_mode="Markdown"
         )
     except Exception as e:
@@ -245,5 +245,5 @@ async def main():
     print("Бот запущен. Пароли шифруются. Требуется секретный ключ при старте.")
     await dp.start_polling(bot)
 
-if name == "main":
+if __name__ == "__main__":
     asyncio.run(main())
