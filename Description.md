@@ -39,6 +39,7 @@ Once started, every new user must send the secret key to gain access. Then the f
 - The master password is transmitted in plain text to the bot (Telegram messages are encrypted in transit, but the bot sees them). Do not use a master password that you use elsewhere.
 - The secret key provides basic access control; change it regularly.
 - For production, use environment variables instead of hardcoding secrets.
+- Important: a shared database for all users who have access to the bot.
 
 ---
 
@@ -82,3 +83,4 @@ Once started, every new user must send the secret key to gain access. Then the f
 - Мастер-пароль передаётся в открытом виде в бот (сообщения Telegram шифруются при передаче, но бот их видит). Не используйте мастер-пароль, который вы применяете где-либо ещё.
 - Секретный ключ обеспечивает базовый контроль доступа; меняйте его периодически.
 - В производственном окружении используйте переменные окружения, а не жёстко заданные секреты в коде.
+- Важно: общая база данных для всех пользователей, имеющих доступ к боту.
